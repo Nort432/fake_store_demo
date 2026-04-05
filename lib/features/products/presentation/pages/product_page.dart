@@ -6,7 +6,6 @@ import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
-import '../../domain/repositories/products_repository.dart';
 import '../cubit/product_details_cubit.dart';
 import '../widgets/product_page/product_content_section.dart';
 import '../widgets/product_page/product_error_section.dart';
@@ -26,7 +25,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   void initState() {
     super.initState();
-    _cubit = ProductDetailsCubit(getIt<ProductsRepository>());
+    _cubit = getIt<ProductDetailsCubit>();
     final id = int.tryParse(widget.productId);
     if (id == null) {
       _cubit.setInvalidId();

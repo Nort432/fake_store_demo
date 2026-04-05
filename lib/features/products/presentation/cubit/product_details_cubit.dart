@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../domain/entities/product.dart';
 import '../../domain/repositories/products_repository.dart';
 
 part 'product_details_state.dart';
 
+@injectable
 class ProductDetailsCubit extends Cubit<ProductDetailsState> {
   ProductDetailsCubit(this._productsRepository)
     : super(const ProductDetailsState());

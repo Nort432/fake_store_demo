@@ -18,6 +18,8 @@ import '../../app/router/app_router.dart' as _i180;
 import '../../features/auth/data/datasources/auth_remote_data_source.dart'
     as _i107;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
+import '../../features/auth/presentation/cubit/home_session_cubit.dart'
+    as _i518;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
 import '../../features/cart/presentation/cubit/cart_cubit.dart' as _i499;
 import '../../features/products/data/datasources/products_remote_data_source.dart'
@@ -27,8 +29,12 @@ import '../../features/products/data/repositories/products_repository_impl.dart'
 import '../../features/products/domain/repositories/products_repository.dart'
     as _i27;
 import '../../features/products/presentation/bloc/products_bloc.dart' as _i975;
+import '../../features/products/presentation/cubit/product_details_cubit.dart'
+    as _i530;
 import '../../features/wishlist/presentation/cubit/wishlist_cubit.dart'
     as _i692;
+import '../../features/wishlist/presentation/cubit/wishlist_products_cubit.dart'
+    as _i822;
 import '../network/network_error_mapper.dart' as _i999;
 import 'register_module.dart' as _i291;
 
@@ -63,6 +69,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i573.AuthRepository(
         gh<_i107.AuthRemoteDataSource>(),
         gh<_i999.NetworkErrorMapper>(),
+        gh<_i460.SharedPreferences>(),
       ),
     );
     gh.lazySingleton<_i27.ProductsRepository>(
@@ -71,11 +78,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i999.NetworkErrorMapper>(),
       ),
     );
+    gh.factory<_i518.HomeSessionCubit>(
+      () => _i518.HomeSessionCubit(gh<_i573.AuthRepository>()),
+    );
     gh.factory<_i69.LoginCubit>(
       () => _i69.LoginCubit(gh<_i573.AuthRepository>()),
     );
     gh.factory<_i975.ProductsBloc>(
       () => _i975.ProductsBloc(gh<_i27.ProductsRepository>()),
+    );
+    gh.factory<_i530.ProductDetailsCubit>(
+      () => _i530.ProductDetailsCubit(gh<_i27.ProductsRepository>()),
+    );
+    gh.factory<_i822.WishlistProductsCubit>(
+      () => _i822.WishlistProductsCubit(gh<_i27.ProductsRepository>()),
     );
     return this;
   }

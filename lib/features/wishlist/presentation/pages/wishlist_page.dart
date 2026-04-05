@@ -7,114 +7,133 @@ import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_bottom_nav_bar.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/product_card.dart';
-import '../../../products/domain/entities/product.dart';
-import '../../../products/domain/repositories/products_repository.dart';
 import '../cubit/wishlist_cubit.dart';
+import '../cubit/wishlist_products_cubit.dart';
 import '../widgets/wishlist/wishlist_empty_section.dart';
 
-class WishlistPage extends StatefulWidget {
+class WishlistPage extends StatelessWidget {
   const WishlistPage({super.key});
 
   @override
-  State<WishlistPage> createState() => _WishlistPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) {
+        final cubit = getIt<WishlistProductsCubit>();
+        final wishlistState = context.read<WishlistCubit>().state;
+        if (wishlistState.isReady) {
+          cubit.loadFor(wishlistState.productIds);
+        }
+        return cubit;
+      },
+      child: const _WishlistView(),
+    );
+  }
 }
 
-class _WishlistPageState extends State<WishlistPage> {
-  final _productsRepository = getIt<ProductsRepository>();
-
-  Future<List<Product>> _loadProducts(Set<int> ids) async {
-    final sortedIds = ids.toList()..sort();
-    final results = await Future.wait(
-      sortedIds.map((id) => _productsRepository.fetchProductById(id)),
-      eagerError: false,
-    );
-    return results;
-  }
+class _WishlistView extends StatelessWidget {
+  const _WishlistView();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.appPalette.surfaceCard,
-      appBar: AppBar(title: const Text('Wishlist')),
-      body: BlocBuilder<WishlistCubit, WishlistState>(
-        builder: (context, state) {
-          if (!state.isReady) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return BlocListener<WishlistCubit, WishlistState>(
+      listenWhen: (previous, current) =>
+          previous.productIds != current.productIds ||
+          previous.isReady != current.isReady,
+      listener: (context, state) {
+        if (state.isReady) {
+          context.read<WishlistProductsCubit>().loadFor(state.productIds);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: context.appPalette.surfaceCard,
+        appBar: AppBar(title: const Text('Wishlist')),
+        body: BlocBuilder<WishlistCubit, WishlistState>(
+          builder: (context, wishlistState) {
+            if (!wishlistState.isReady) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (state.productIds.isEmpty) {
-            return WishlistEmptySection(onGoHome: () => context.go('/home'));
-          }
+            if (wishlistState.productIds.isEmpty) {
+              return WishlistEmptySection(onGoHome: () => context.go('/home'));
+            }
 
-          return FutureBuilder<List<Product>>(
-            future: _loadProducts(state.productIds),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData && !snapshot.hasError) {
-                return const Center(child: CircularProgressIndicator());
-              }
+            return BlocBuilder<WishlistProductsCubit, WishlistProductsState>(
+              builder: (context, productsState) {
+                if (productsState.status == WishlistProductsStatus.initial ||
+                    productsState.status == WishlistProductsStatus.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (snapshot.hasError) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Failed to load wishlist items'),
-                        const SizedBox(height: 12),
-                        AppButton(
-                          label: 'Try again',
-                          onPressed: () => setState(() {}),
-                        ),
-                      ],
+                if (productsState.status == WishlistProductsStatus.failure) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            productsState.errorMessage.isEmpty
+                                ? 'Failed to load wishlist items'
+                                : productsState.errorMessage,
+                          ),
+                          const SizedBox(height: 12),
+                          AppButton(
+                            label: 'Try again',
+                            onPressed: () {
+                              context.read<WishlistProductsCubit>().loadFor(
+                                wishlistState.productIds,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }
-
-              final products = snapshot.data ?? const <Product>[];
-              if (products.isEmpty) {
-                return WishlistEmptySection(
-                  onGoHome: () => context.go('/home'),
-                );
-              }
-
-              return ListView.separated(
-                padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
-                itemCount: products.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductCard(
-                    imageUrl: product.imageUrl,
-                    title: product.title,
-                    subtitle: product.subtitle,
-                    price: product.price,
-                    rating: product.rating,
-                    isFavorite: true,
-                    onFavoriteTap: () =>
-                        context.read<WishlistCubit>().toggle(product.id),
-                    onTap: () => context.push('/product/${product.id}'),
                   );
-                },
-              );
-            },
-          );
-        },
-      ),
-      bottomNavigationBar: AppBottomNavBar(
-        activeTab: AppBottomTab.wishlist,
-        onTabSelected: (tab) {
-          switch (tab) {
-            case AppBottomTab.home:
-              context.go('/home');
-            case AppBottomTab.cart:
-              context.go('/cart');
-            case AppBottomTab.wishlist:
-              context.go('/wishlist');
-          }
-        },
+                }
+
+                if (productsState.products.isEmpty) {
+                  return WishlistEmptySection(
+                    onGoHome: () => context.go('/home'),
+                  );
+                }
+
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(18, 14, 18, 14),
+                  itemCount: productsState.products.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final product = productsState.products[index];
+                    return ProductCard(
+                      imageUrl: product.imageUrl,
+                      title: product.title,
+                      subtitle: product.subtitle,
+                      price: product.price,
+                      rating: product.rating,
+                      isFavorite: true,
+                      onFavoriteTap: () =>
+                          context.read<WishlistCubit>().toggle(product.id),
+                      onTap: () => context.push('/product/${product.id}'),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
+        bottomNavigationBar: AppBottomNavBar(
+          activeTab: AppBottomTab.wishlist,
+          onTabSelected: (tab) {
+            switch (tab) {
+              case AppBottomTab.home:
+                context.go('/home');
+              case AppBottomTab.cart:
+                context.go('/cart');
+              case AppBottomTab.wishlist:
+                context.go('/wishlist');
+            }
+          },
+        ),
       ),
     );
   }
