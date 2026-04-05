@@ -19,6 +19,7 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart'
     as _i107;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
+import '../../features/cart/presentation/cubit/cart_cubit.dart' as _i499;
 import '../../features/products/data/datasources/products_remote_data_source.dart'
     as _i646;
 import '../../features/products/data/repositories/products_repository_impl.dart'
@@ -46,6 +47,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i999.NetworkErrorMapper>(
       () => const _i999.NetworkErrorMapper(),
     );
+    gh.lazySingleton<_i499.CartCubit>(() => _i499.CartCubit());
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
       () => _i107.AuthRemoteDataSource(gh<_i361.Dio>()),
     );
