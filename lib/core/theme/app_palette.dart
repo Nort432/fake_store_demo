@@ -9,6 +9,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     required this.borderSubtle,
     required this.buttonDark,
     required this.buttonLightGold,
+    required this.accentPale,
     required this.buttonStrongGold,
     required this.disabledBackground,
     required this.textPrimary,
@@ -26,6 +27,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color borderSubtle;
   final Color buttonDark;
   final Color buttonLightGold;
+  final Color accentPale;
   final Color buttonStrongGold;
   final Color disabledBackground;
   final Color textPrimary;
@@ -44,6 +46,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? borderSubtle,
     Color? buttonDark,
     Color? buttonLightGold,
+    Color? accentPale,
     Color? buttonStrongGold,
     Color? disabledBackground,
     Color? textPrimary,
@@ -61,6 +64,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       borderSubtle: borderSubtle ?? this.borderSubtle,
       buttonDark: buttonDark ?? this.buttonDark,
       buttonLightGold: buttonLightGold ?? this.buttonLightGold,
+      accentPale: accentPale ?? this.accentPale,
       buttonStrongGold: buttonStrongGold ?? this.buttonStrongGold,
       disabledBackground: disabledBackground ?? this.disabledBackground,
       textPrimary: textPrimary ?? this.textPrimary,
@@ -91,6 +95,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       buttonLightGold:
           Color.lerp(buttonLightGold, other.buttonLightGold, t) ??
           buttonLightGold,
+      accentPale: Color.lerp(accentPale, other.accentPale, t) ?? accentPale,
       buttonStrongGold:
           Color.lerp(buttonStrongGold, other.buttonStrongGold, t) ??
           buttonStrongGold,

@@ -17,7 +17,7 @@ abstract final class AppTheme {
     final screenTitleStyle = GoogleFonts.urbanist(
       color: AppColors.darkText,
       fontWeight: FontWeight.w600,
-      fontSize: 28,
+      fontSize: 24,
       height: 1.25,
     );
     final buttonLabelStyle = GoogleFonts.urbanist(
@@ -43,8 +43,8 @@ abstract final class AppTheme {
     );
     final productSubtitleStyle = GoogleFonts.inter(
       color: AppColors.metaGray,
-      fontSize: 12,
-      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
     );
     final productMetaStyle = GoogleFonts.inter(
       color: AppColors.metaGray,
@@ -128,6 +128,7 @@ abstract final class AppTheme {
           borderSubtle: AppColors.inputBorder,
           buttonDark: AppColors.darkButton,
           buttonLightGold: AppColors.primaryLightGold,
+          accentPale: AppColors.accentPale,
           buttonStrongGold: AppColors.primaryStrongGold,
           disabledBackground: AppColors.disabledBackground,
           textPrimary: AppColors.darkText,

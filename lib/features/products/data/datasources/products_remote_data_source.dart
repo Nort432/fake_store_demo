@@ -24,4 +24,10 @@ class ProductsRemoteDataSource {
         .map(ProductDto.fromJson)
         .toList();
   }
+
+  Future<ProductDto> fetchProductById(int id) async {
+    final response = await _dio.get<Map<String, dynamic>>('/products/$id');
+    final data = response.data ?? <String, dynamic>{};
+    return ProductDto.fromJson(data);
+  }
 }

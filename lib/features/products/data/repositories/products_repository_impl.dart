@@ -28,4 +28,14 @@ class ProductsRepositoryImpl implements ProductsRepository {
       throw ProductsFailure(_errorMapper.toMessage(error));
     }
   }
+
+  @override
+  Future<Product> fetchProductById(int id) async {
+    try {
+      final item = await _remoteDataSource.fetchProductById(id);
+      return item.toEntity();
+    } catch (error) {
+      throw ProductsFailure(_errorMapper.toMessage(error));
+    }
+  }
 }

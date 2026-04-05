@@ -5,6 +5,8 @@ abstract interface class ProductsRepository {
     required int offset,
     required int limit,
   });
+
+  Future<Product> fetchProductById(int id);
 }
 
 class ProductsFailure implements Exception {

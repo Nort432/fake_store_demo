@@ -12,7 +12,6 @@ class WelcomePage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          // mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset('assets/images/plant_background.png', fit: BoxFit.fill),

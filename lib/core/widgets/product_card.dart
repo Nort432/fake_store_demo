@@ -70,10 +70,10 @@ class ProductCard extends StatelessWidget {
               ),
               const SizedBox(width: 14),
               Expanded(
-                child: Stack(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 34),
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -113,23 +113,20 @@ class ProductCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: IconButton(
-                        onPressed: onFavoriteTap,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints.tightFor(
-                          width: 28,
-                          height: 28,
-                        ),
-                        icon: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          size: 22,
-                          color: isFavorite
-                              ? context.appPalette.heartActive
-                              : context.appPalette.navInactive,
-                        ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: onFavoriteTap,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints.tightFor(
+                        width: 28,
+                        height: 28,
+                      ),
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        size: 22,
+                        color: isFavorite
+                            ? context.appPalette.heartActive
+                            : context.appPalette.navInactive,
                       ),
                     ),
                   ],
