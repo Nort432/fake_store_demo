@@ -1,3 +1,3 @@
 abstract final class AppConstants {
-  static const String apiBaseUrl = 'https://fakeapi.platzi.com/api/v1';
+  static const String apiBaseUrl = 'https://api.escuelajs.co/api/v1';
 }

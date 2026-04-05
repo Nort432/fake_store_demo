@@ -30,7 +30,7 @@ class WelcomePage extends StatelessWidget {
                   Text('Fake Store', style: context.appTypography.screenTitle),
                   const SizedBox(height: 40),
                   ElevatedButton(
-                    onPressed: () => context.go('/login'),
+                    onPressed: () => context.push('/login'),
                     style: Theme.of(context).elevatedButtonTheme.style,
                     child: const Text('Login'),
                   ),
