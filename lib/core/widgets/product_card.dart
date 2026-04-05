@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../constants/app_radii.dart';
+import '../theme/app_palette.dart';
+import '../theme/app_typography.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
     required this.imageUrl,
     required this.title,
+    required this.subtitle,
     required this.price,
     required this.rating,
+    required this.isFavorite,
+    required this.onFavoriteTap,
     required this.onTap,
     super.key,
   });
 
   final String imageUrl;
   final String title;
+  final String subtitle;
   final double price;
   final double rating;
+  final bool isFavorite;
+  final VoidCallback onFavoriteTap;
   final VoidCallback onTap;
 
   @override
@@ -23,6 +31,7 @@ class ProductCard extends StatelessWidget {
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
+      color: context.appPalette.productCardSurface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadii.productCard),
       ),
@@ -30,65 +39,101 @@ class ProductCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadii.productCard),
         onTap: onTap,
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(14),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(AppRadii.smallImage),
-                child: imageUrl.isEmpty
-                    ? Container(
-                        width: 72,
-                        height: 72,
-                        color: Colors.grey.shade100,
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.image_not_supported_outlined),
-                      )
-                    : Image.network(
-                        imageUrl,
-                        width: 72,
-                        height: 72,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            width: 72,
-                            height: 72,
-                            color: Colors.grey.shade100,
+              Container(
+                width: 72,
+                height: 72,
+                decoration: BoxDecoration(
+                  color: context.appPalette.surfaceCard,
+                  borderRadius: BorderRadius.circular(AppRadii.smallImage),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadii.smallImage),
+                  child: Center(
+                    child: imageUrl.isEmpty
+                        ? const Icon(Icons.image_not_supported_outlined)
+                        : Image.network(
+                            imageUrl,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
                             alignment: Alignment.center,
-                            child: const Icon(Icons.broken_image_outlined),
-                          );
-                        },
-                      ),
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.broken_image_outlined);
+                            },
+                          ),
+                  ),
+                ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 14),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
                   children: [
-                    Text(
-                      title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 34),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.appTypography.productTitle,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: context.appTypography.productSubtitle,
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                size: 14,
+                                color: context.appPalette.textHeader,
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                rating.toStringAsFixed(1),
+                                style: context.appTypography.productMeta,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '\$${price.toStringAsFixed(2)}',
+                            style: context.appTypography.productPrice,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '\$${price.toStringAsFixed(0)}',
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: IconButton(
+                        onPressed: onFavoriteTap,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints.tightFor(
+                          width: 28,
+                          height: 28,
+                        ),
+                        icon: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          size: 22,
+                          color: isFavorite
+                              ? context.appPalette.heartActive
+                              : context.appPalette.navInactive,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(width: 8),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.star_rounded, size: 18, color: Colors.amber),
-                  const SizedBox(width: 2),
-                  Text(
-                    rating.toStringAsFixed(1),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
               ),
             ],
           ),

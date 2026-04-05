@@ -6,12 +6,14 @@ class ProductDto {
     required this.title,
     required this.price,
     required this.images,
+    required this.categoryName,
   });
 
   final int id;
   final String title;
   final num price;
   final List<String> images;
+  final String categoryName;
 
   factory ProductDto.fromJson(Map<String, dynamic> json) {
     return ProductDto(
@@ -21,6 +23,9 @@ class ProductDto {
       images: ((json['images'] as List<dynamic>?) ?? <dynamic>[])
           .map((image) => image.toString())
           .toList(),
+      categoryName:
+          (json['category'] as Map<String, dynamic>?)?['name'] as String? ??
+          'General',
     );
   }
 
@@ -28,6 +33,7 @@ class ProductDto {
     return Product(
       id: id,
       title: title,
+      subtitle: categoryName,
       price: price.toDouble(),
       imageUrl: _resolveImage(images),
       rating: _resolveRating(id),

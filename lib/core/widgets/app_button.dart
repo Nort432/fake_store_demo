@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../constants/app_colors.dart';
 import '../constants/app_radii.dart';
+import '../theme/app_palette.dart';
 
 enum AppButtonVariant {
   darkFilled,
@@ -28,7 +28,7 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = _style();
+    final style = _style(context);
 
     return SizedBox(
       height: small ? 40 : 52,
@@ -40,7 +40,8 @@ class AppButton extends StatelessWidget {
     );
   }
 
-  ButtonStyle _style() {
+  ButtonStyle _style(BuildContext context) {
+    final palette = context.appPalette;
     final isDisabled = onPressed == null;
 
     Color backgroundColor;
@@ -49,30 +50,30 @@ class AppButton extends StatelessWidget {
 
     switch (variant) {
       case AppButtonVariant.darkFilled:
-        backgroundColor = AppColors.darkButton;
+        backgroundColor = palette.buttonDark;
         foregroundColor = Colors.white;
       case AppButtonVariant.lightGoldFilled:
-        backgroundColor = AppColors.primaryLightGold;
-        foregroundColor = AppColors.darkText;
+        backgroundColor = palette.buttonLightGold;
+        foregroundColor = palette.textPrimary;
       case AppButtonVariant.strongGoldFilled:
-        backgroundColor = AppColors.primaryStrongGold;
+        backgroundColor = palette.buttonStrongGold;
         foregroundColor = Colors.white;
       case AppButtonVariant.outlinedActive:
-        backgroundColor = Colors.white;
-        foregroundColor = AppColors.darkText;
-        border = const BorderSide(color: AppColors.inputBorder);
+        backgroundColor = palette.surfaceCard;
+        foregroundColor = palette.textPrimary;
+        border = BorderSide(color: palette.borderSubtle);
       case AppButtonVariant.outlinedDisabled:
-        backgroundColor = Colors.white;
-        foregroundColor = AppColors.inactiveIconGray;
-        border = const BorderSide(color: AppColors.inputBorder);
+        backgroundColor = palette.surfaceCard;
+        foregroundColor = palette.navInactive;
+        border = BorderSide(color: palette.borderSubtle);
       case AppButtonVariant.disabledFilled:
-        backgroundColor = AppColors.disabledBackground;
-        foregroundColor = AppColors.inactiveIconGray;
+        backgroundColor = palette.disabledBackground;
+        foregroundColor = palette.navInactive;
     }
 
     if (isDisabled && variant != AppButtonVariant.disabledFilled) {
-      backgroundColor = AppColors.disabledBackground;
-      foregroundColor = AppColors.inactiveIconGray;
+      backgroundColor = palette.disabledBackground;
+      foregroundColor = palette.navInactive;
     }
 
     return ElevatedButton.styleFrom(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../core/constants/app_colors.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/theme/app_palette.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../cubit/login_cubit.dart';
@@ -30,6 +30,13 @@ class _LoginView extends StatefulWidget {
 class _LoginViewState extends State<_LoginView> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController.text = 'john@mail.com';
+    _passwordController.text = 'changeme';
+  }
 
   @override
   void dispose() {
@@ -62,7 +69,7 @@ class _LoginViewState extends State<_LoginView> {
             padding: const EdgeInsets.all(8),
             child: DecoratedBox(
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.inputBorder),
+                border: Border.all(color: context.appPalette.borderSubtle),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: IconButton(
