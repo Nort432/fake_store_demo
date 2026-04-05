@@ -29,6 +29,8 @@ abstract final class AppTheme {
         titleLarge: GoogleFonts.urbanist(
           color: AppColors.darkText,
           fontWeight: FontWeight.w600,
+          fontSize: 28,
+          height: 1.25,
         ),
         bodyLarge: GoogleFonts.inter(color: AppColors.darkText),
         bodyMedium: GoogleFonts.inter(color: AppColors.metaGray),
