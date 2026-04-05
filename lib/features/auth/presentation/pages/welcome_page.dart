@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/widgets/app_button.dart';
@@ -16,22 +17,21 @@ class WelcomePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const Spacer(),
+              Image.asset(
+                'assets/images/plant_background.png',
+                height: 330,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 28),
+              SvgPicture.asset('assets/icons/fake_store_logo.svg', height: 46),
+              const SizedBox(height: 20),
               Text(
                 'Fake Store',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.displayLarge,
               ),
-              const SizedBox(height: 12),
-              Text(
-                'Shop with clean design and smooth flow.',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
               const Spacer(),
-              AppButton(
-                label: 'Go to login',
-                onPressed: () => context.go('/login'),
-              ),
+              AppButton(label: 'Login', onPressed: () => context.go('/login')),
             ],
           ),
         ),
