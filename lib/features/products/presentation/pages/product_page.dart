@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
+import '../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../domain/repositories/products_repository.dart';
 import '../cubit/product_details_cubit.dart';
 import '../widgets/product_page/product_content_section.dart';
@@ -21,7 +22,6 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   late final ProductDetailsCubit _cubit;
-  bool _isFavorite = false;
 
   @override
   void initState() {
@@ -47,10 +47,6 @@ class _ProductPageState extends State<ProductPage> {
     } else {
       context.go('/home');
     }
-  }
-
-  void _toggleFavorite() {
-    setState(() => _isFavorite = !_isFavorite);
   }
 
   @override
@@ -79,13 +75,18 @@ class _ProductPageState extends State<ProductPage> {
               );
             }
 
+            final product = state.product!;
+            final isFavorite = context.watch<WishlistCubit>().contains(
+              product.id,
+            );
             return ProductContentSection(
-              product: state.product!,
-              isFavorite: _isFavorite,
+              product: product,
+              isFavorite: isFavorite,
               onBack: () => _handleBack(context),
-              onFavoriteTap: _toggleFavorite,
+              onFavoriteTap: () =>
+                  context.read<WishlistCubit>().toggle(product.id),
               onAddToCart: () {
-                context.read<CartCubit>().addProduct(state.product!);
+                context.read<CartCubit>().addProduct(product);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Product added to cart')),
                 );

@@ -27,6 +27,8 @@ import '../../features/products/data/repositories/products_repository_impl.dart'
 import '../../features/products/domain/repositories/products_repository.dart'
     as _i27;
 import '../../features/products/presentation/bloc/products_bloc.dart' as _i975;
+import '../../features/wishlist/presentation/cubit/wishlist_cubit.dart'
+    as _i692;
 import '../network/network_error_mapper.dart' as _i999;
 import 'register_module.dart' as _i291;
 
@@ -48,6 +50,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => const _i999.NetworkErrorMapper(),
     );
     gh.lazySingleton<_i499.CartCubit>(() => _i499.CartCubit());
+    gh.lazySingleton<_i692.WishlistCubit>(
+      () => _i692.WishlistCubit(gh<_i460.SharedPreferences>()),
+    );
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
       () => _i107.AuthRemoteDataSource(gh<_i361.Dio>()),
     );
