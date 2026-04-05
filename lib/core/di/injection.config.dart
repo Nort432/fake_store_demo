@@ -19,6 +19,13 @@ import '../../features/auth/data/datasources/auth_remote_data_source.dart'
     as _i107;
 import '../../features/auth/data/repositories/auth_repository.dart' as _i573;
 import '../../features/auth/presentation/cubit/login_cubit.dart' as _i69;
+import '../../features/products/data/datasources/products_remote_data_source.dart'
+    as _i646;
+import '../../features/products/data/repositories/products_repository_impl.dart'
+    as _i1045;
+import '../../features/products/domain/repositories/products_repository.dart'
+    as _i27;
+import '../../features/products/presentation/bloc/products_bloc.dart' as _i975;
 import '../network/network_error_mapper.dart' as _i999;
 import 'register_module.dart' as _i291;
 
@@ -42,14 +49,26 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i107.AuthRemoteDataSource>(
       () => _i107.AuthRemoteDataSource(gh<_i361.Dio>()),
     );
+    gh.lazySingleton<_i646.ProductsRemoteDataSource>(
+      () => _i646.ProductsRemoteDataSource(gh<_i361.Dio>()),
+    );
     gh.lazySingleton<_i573.AuthRepository>(
       () => _i573.AuthRepository(
         gh<_i107.AuthRemoteDataSource>(),
         gh<_i999.NetworkErrorMapper>(),
       ),
     );
+    gh.lazySingleton<_i27.ProductsRepository>(
+      () => _i1045.ProductsRepositoryImpl(
+        gh<_i646.ProductsRemoteDataSource>(),
+        gh<_i999.NetworkErrorMapper>(),
+      ),
+    );
     gh.factory<_i69.LoginCubit>(
       () => _i69.LoginCubit(gh<_i573.AuthRepository>()),
+    );
+    gh.factory<_i975.ProductsBloc>(
+      () => _i975.ProductsBloc(gh<_i27.ProductsRepository>()),
     );
     return this;
   }
