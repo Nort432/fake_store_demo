@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/app_theme.dart';
+import '../theme/app_typography.dart';
 import 'app_button.dart';
 
 class BottomActionBar extends StatelessWidget {
@@ -30,7 +30,7 @@ class BottomActionBar extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(label),
-                Text(price, style: AppTheme.moneyStyle()),
+                Text(price, style: context.appTypography.priceAccent),
               ],
             ),
           ),

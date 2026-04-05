@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/app_typography.dart';
+
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
 
@@ -25,10 +27,7 @@ class WelcomePage extends StatelessWidget {
                     height: 58,
                   ),
                   const SizedBox(height: 17),
-                  Text(
-                    'Fake Store',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  Text('Fake Store', style: context.appTypography.screenTitle),
                   const SizedBox(height: 40),
                   ElevatedButton(
                     onPressed: () => context.go('/login'),

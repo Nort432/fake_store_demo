@@ -3,10 +3,37 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_radii.dart';
+import 'app_typography.dart';
 
 abstract final class AppTheme {
   static ThemeData get light {
     final baseTheme = ThemeData.light(useMaterial3: true);
+    final fallbackTextTheme = baseTheme.textTheme.apply(
+      fontFamily: GoogleFonts.inter().fontFamily,
+      bodyColor: AppColors.darkText,
+      displayColor: AppColors.darkText,
+    );
+    final screenTitleStyle = GoogleFonts.urbanist(
+      color: AppColors.darkText,
+      fontWeight: FontWeight.w600,
+      fontSize: 28,
+      height: 1.25,
+    );
+    final buttonLabelStyle = GoogleFonts.urbanist(
+      color: Colors.white,
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+    );
+    final appBarTitleStyle = GoogleFonts.urbanist(
+      color: AppColors.headerDark,
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+    );
+    final priceAccentStyle = GoogleFonts.lora(
+      color: AppColors.darkText,
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+    );
 
     return baseTheme.copyWith(
       scaffoldBackgroundColor: Colors.white,
@@ -17,28 +44,7 @@ abstract final class AppTheme {
         onPrimary: Colors.white,
         onSurface: AppColors.darkText,
       ),
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.urbanist(
-          color: AppColors.headerDark,
-          fontWeight: FontWeight.w700,
-        ),
-        headlineMedium: GoogleFonts.urbanist(
-          color: AppColors.headerDark,
-          fontWeight: FontWeight.w700,
-        ),
-        titleLarge: GoogleFonts.urbanist(
-          color: AppColors.darkText,
-          fontWeight: FontWeight.w600,
-          fontSize: 28,
-          height: 1.25,
-        ),
-        bodyLarge: GoogleFonts.inter(color: AppColors.darkText),
-        bodyMedium: GoogleFonts.inter(color: AppColors.metaGray),
-        labelLarge: GoogleFonts.urbanist(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+      textTheme: fallbackTextTheme,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.inputBackground,
@@ -61,16 +67,13 @@ abstract final class AppTheme {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(double.infinity, 52),
+          minimumSize: const Size(double.infinity, 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppRadii.button),
           ),
           backgroundColor: AppColors.darkButton,
           foregroundColor: Colors.white,
-          textStyle: GoogleFonts.urbanist(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: buttonLabelStyle,
         ),
       ),
       appBarTheme: AppBarTheme(
@@ -78,15 +81,14 @@ abstract final class AppTheme {
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: AppColors.headerDark,
-        titleTextStyle: GoogleFonts.urbanist(
-          color: AppColors.headerDark,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-        ),
+        titleTextStyle: appBarTitleStyle,
       ),
+      extensions: <ThemeExtension<dynamic>>[
+        AppTypography(
+          screenTitle: screenTitleStyle,
+          priceAccent: priceAccentStyle,
+        ),
+      ],
     );
   }
-
-  static TextStyle moneyStyle({Color color = AppColors.darkText}) =>
-      GoogleFonts.lora(color: color, fontSize: 24, fontWeight: FontWeight.w600);
 }
