@@ -96,7 +96,7 @@ class ProductCard extends StatelessWidget {
                               Icon(
                                 Icons.star_rounded,
                                 size: 14,
-                                color: context.appPalette.textHeader,
+                                color: context.appPalette.star,
                               ),
                               const SizedBox(width: 2),
                               Text(

@@ -76,7 +76,11 @@ class _LoginViewState extends State<_LoginView> {
               ),
               child: IconButton(
                 onPressed: () {
-                  context.pop();
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go('/welcome');
+                  }
                 },
                 icon: const Icon(Icons.arrow_back_ios_new, size: 18),
               ),

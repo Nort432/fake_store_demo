@@ -9,7 +9,7 @@ class NetworkErrorMapper {
     if (error is DioException) {
       final statusCode = error.response?.statusCode;
       if (statusCode == 401) {
-        return 'Invalid email or password';
+        return 'Invalid credentials';
       }
       if (statusCode != null && statusCode >= 500) {
         return 'Server is unavailable. Try again later.';

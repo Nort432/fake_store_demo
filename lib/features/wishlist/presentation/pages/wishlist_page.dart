@@ -24,7 +24,7 @@ class WishlistPage extends StatelessWidget {
         final cubit = getIt<WishlistProductsCubit>();
         final wishlistState = context.read<WishlistCubit>().state;
         if (wishlistState.isReady) {
-          cubit.loadFor(wishlistState.productIds);
+          cubit.syncWith(wishlistState.productIds);
         }
         return cubit;
       },
@@ -56,7 +56,7 @@ class _WishlistView extends StatelessWidget {
               previous.isReady != current.isReady,
           listener: (context, state) {
             if (state.isReady) {
-              context.read<WishlistProductsCubit>().loadFor(state.productIds);
+              context.read<WishlistProductsCubit>().syncWith(state.productIds);
             }
           },
         ),

@@ -6,9 +6,7 @@ import '../bloc/products_bloc.dart';
 import '../widgets/home/home_view.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, this.username});
-
-  final String? username;
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

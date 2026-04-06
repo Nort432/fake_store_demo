@@ -37,7 +37,7 @@ class ProductInfoSection extends StatelessWidget {
               Icon(
                 Icons.star_rounded,
                 size: 16,
-                color: context.appPalette.textPrimary,
+                color: context.appPalette.star,
               ),
               const SizedBox(width: 4),
               Text(
