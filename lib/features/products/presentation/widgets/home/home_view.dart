@@ -7,10 +7,10 @@ import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/app_bottom_nav_bar.dart';
 import '../../../../../core/widgets/app_bottom_nav_router.dart';
 import '../../../../../core/widgets/product_card.dart';
+import '../../../../../core/widgets/app_top_header.dart';
 import '../../../../auth/presentation/cubit/home_session_cubit.dart';
 import '../../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../bloc/products_bloc.dart';
-import 'home_header.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -83,8 +83,12 @@ class _HomeViewState extends State<HomeView> {
               children: [
                 BlocBuilder<HomeSessionCubit, HomeSessionState>(
                   builder: (context, state) {
-                    return HomeHeader(
-                      username: state.userName,
+                    final userName = state.userName.trim();
+                    final title = userName.isEmpty
+                        ? 'Welcome'
+                        : 'Welcome,\n$userName';
+                    return AppTopHeader(
+                      title: title,
                       onLogout: () => context.read<HomeSessionCubit>().logout(),
                     );
                   },

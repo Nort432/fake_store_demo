@@ -31,4 +31,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/plant_background.png
+    - assets/icons/cart_icon.svg
     - assets/icons/fake_store_logo.svg
+    - assets/icons/home_icon.svg

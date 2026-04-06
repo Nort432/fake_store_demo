@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../theme/app_palette.dart';
 import '../theme/app_typography.dart';
@@ -30,7 +31,7 @@ class AppBottomNavBar extends StatelessWidget {
             tab: AppBottomTab.home,
             activeTab: activeTab,
             label: 'Home',
-            icon: Icons.home_outlined,
+            svgAsset: 'assets/icons/home_icon.svg',
             onTap: onTabSelected,
           ),
           _NavItem(
@@ -44,7 +45,7 @@ class AppBottomNavBar extends StatelessWidget {
             tab: AppBottomTab.cart,
             activeTab: activeTab,
             label: 'Cart',
-            icon: Icons.shopping_cart_outlined,
+            svgAsset: 'assets/icons/cart_icon.svg',
             onTap: onTabSelected,
           ),
         ],
@@ -58,14 +59,16 @@ class _NavItem extends StatelessWidget {
     required this.tab,
     required this.activeTab,
     required this.label,
-    required this.icon,
     required this.onTap,
+    this.icon,
+    this.svgAsset,
   });
 
   final AppBottomTab tab;
   final AppBottomTab activeTab;
   final String label;
-  final IconData icon;
+  final IconData? icon;
+  final String? svgAsset;
   final ValueChanged<AppBottomTab> onTap;
 
   @override
@@ -83,7 +86,15 @@ class _NavItem extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: color),
+            if (svgAsset != null)
+              SvgPicture.asset(
+                svgAsset!,
+                width: 20,
+                height: 20,
+                colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+              )
+            else
+              Icon(icon, color: color),
             const SizedBox(height: 2),
             Text(
               label,

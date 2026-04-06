@@ -7,6 +7,7 @@ import '../../../../core/theme/app_palette.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_text_field.dart';
 import '../cubit/login_cubit.dart';
+import '../cubit/home_session_cubit.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -53,6 +54,7 @@ class _LoginViewState extends State<_LoginView> {
           previous.errorMessage != current.errorMessage,
       listener: (context, state) {
         if (state.status == LoginStatus.success) {
+          context.read<HomeSessionCubit>().restoreUserName();
           context.go('/home');
         }
 
