@@ -15,7 +15,7 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
     on<ProductsLoadMoreRequested>(_onLoadMoreRequested);
   }
 
-  static const int _pageLimit = 10;
+  static const int _pageLimit = 24;
   final ProductsRepository _productsRepository;
 
   Future<void> _onStarted(
@@ -58,20 +58,23 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       return;
     }
 
+    final offset = state.nextOffset;
     emit(state.copyWith(isLoadingMore: true));
 
     try {
       final products = await _productsRepository.fetchProducts(
-        offset: state.nextOffset,
+        offset: offset,
         limit: _pageLimit,
       );
+      final nextOffset = offset + products.length;
+      final reachedEnd = products.length < _pageLimit;
 
       emit(
         state.copyWith(
           products: [...state.products, ...products],
           isLoadingMore: false,
-          hasReachedMax: products.length < _pageLimit,
-          nextOffset: state.nextOffset + products.length,
+          hasReachedMax: reachedEnd,
+          nextOffset: nextOffset,
         ),
       );
     } on ProductsFailure catch (error) {

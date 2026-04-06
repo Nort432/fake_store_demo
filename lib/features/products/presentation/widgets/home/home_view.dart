@@ -11,8 +11,55 @@ import '../../../../wishlist/presentation/cubit/wishlist_cubit.dart';
 import '../../bloc/products_bloc.dart';
 import 'home_header.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  static const double _paginationThreshold = 200;
+  final ScrollController _scrollController = ScrollController();
+  bool _endZoneTriggered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) {
+      return;
+    }
+
+    final inEndZone =
+        _scrollController.position.extentAfter <= _paginationThreshold;
+    if (!inEndZone) {
+      _endZoneTriggered = false;
+      return;
+    }
+
+    final state = context.read<ProductsBloc>().state;
+    if (_endZoneTriggered ||
+        state.status != ProductsStatus.success ||
+        state.isLoadingMore ||
+        state.hasReachedMax) {
+      return;
+    }
+
+    _endZoneTriggered = true;
+    context.read<ProductsBloc>().add(const ProductsLoadMoreRequested());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,51 +125,41 @@ class HomeView extends StatelessWidget {
                           );
                         }
 
-                        return NotificationListener<ScrollNotification>(
-                          onNotification: (notification) {
-                            if (notification.metrics.pixels >=
-                                notification.metrics.maxScrollExtent - 200) {
-                              context.read<ProductsBloc>().add(
-                                const ProductsLoadMoreRequested(),
+                        return ListView.separated(
+                          controller: _scrollController,
+                          itemCount:
+                              state.products.length +
+                              (state.isLoadingMore ? 1 : 0),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            if (index >= state.products.length) {
+                              return const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               );
                             }
-                            return false;
-                          },
-                          child: ListView.separated(
-                            itemCount:
-                                state.products.length +
-                                (state.isLoadingMore ? 1 : 0),
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 12),
-                            itemBuilder: (context, index) {
-                              if (index >= state.products.length) {
-                                return const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 16),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                );
-                              }
 
-                              final product = state.products[index];
-                              final isFavorite = context
-                                  .watch<WishlistCubit>()
-                                  .contains(product.id);
-                              return ProductCard(
-                                imageUrl: product.imageUrl,
-                                title: product.title,
-                                subtitle: product.subtitle,
-                                price: product.price,
-                                rating: product.rating,
-                                isFavorite: isFavorite,
-                                onFavoriteTap: () => context
-                                    .read<WishlistCubit>()
-                                    .toggle(product.id),
-                                onTap: () =>
-                                    context.push('/product/${product.id}'),
-                              );
-                            },
-                          ),
+                            final product = state.products[index];
+                            final isFavorite = context
+                                .watch<WishlistCubit>()
+                                .contains(product.id);
+                            return ProductCard(
+                              imageUrl: product.imageUrl,
+                              title: product.title,
+                              subtitle: product.subtitle,
+                              price: product.price,
+                              rating: product.rating,
+                              isFavorite: isFavorite,
+                              onFavoriteTap: () => context
+                                  .read<WishlistCubit>()
+                                  .toggle(product.id),
+                              onTap: () =>
+                                  context.push('/product/${product.id}'),
+                            );
+                          },
                         );
                       },
                     ),
