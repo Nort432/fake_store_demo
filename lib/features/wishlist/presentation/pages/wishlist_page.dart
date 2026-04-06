@@ -8,11 +8,11 @@ import '../../../../core/widgets/app_bottom_nav_bar.dart';
 import '../../../../core/widgets/app_bottom_nav_router.dart';
 import '../../../../core/widgets/app_top_header.dart';
 import '../../../../core/widgets/app_button.dart';
-import '../../../../core/widgets/product_card.dart';
 import '../../../auth/presentation/cubit/home_session_cubit.dart';
 import '../cubit/wishlist_cubit.dart';
 import '../cubit/wishlist_products_cubit.dart';
 import '../widgets/wishlist/wishlist_empty_section.dart';
+import '../widgets/wishlist/wishlist_item_card.dart';
 
 class WishlistPage extends StatelessWidget {
   const WishlistPage({super.key});
@@ -143,18 +143,11 @@ class _WishlistView extends StatelessWidget {
                                 const SizedBox(height: 12),
                             itemBuilder: (context, index) {
                               final product = productsState.products[index];
-                              return ProductCard(
-                                imageUrl: product.imageUrl,
-                                title: product.title,
-                                subtitle: product.subtitle,
-                                price: product.price,
-                                rating: product.rating,
-                                isFavorite: true,
+                              return WishlistItemCard(
+                                product: product,
                                 onFavoriteTap: () => context
                                     .read<WishlistCubit>()
                                     .toggle(product.id),
-                                onTap: () =>
-                                    context.push('/product/${product.id}'),
                               );
                             },
                           );
