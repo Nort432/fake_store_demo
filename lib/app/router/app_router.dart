@@ -18,7 +18,11 @@ class AppRouter {
         builder: (context, state) => const WelcomePage(),
       ),
       GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
-      GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+      GoRoute(
+        path: '/home',
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: HomePage()),
+      ),
       GoRoute(
         path: '/product/:id',
         builder: (context, state) {
@@ -26,10 +30,15 @@ class AppRouter {
           return ProductPage(productId: id);
         },
       ),
-      GoRoute(path: '/cart', builder: (context, state) => const CartPage()),
+      GoRoute(
+        path: '/cart',
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: CartPage()),
+      ),
       GoRoute(
         path: '/wishlist',
-        builder: (context, state) => const WishlistPage(),
+        pageBuilder: (context, state) =>
+            const NoTransitionPage(child: WishlistPage()),
       ),
     ],
   );

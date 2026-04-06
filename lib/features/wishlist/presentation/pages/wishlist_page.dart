@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/di/injection.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../../../../core/widgets/app_bottom_nav_router.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../../../../core/widgets/product_card.dart';
 import '../cubit/wishlist_cubit.dart';
@@ -123,16 +124,7 @@ class _WishlistView extends StatelessWidget {
         ),
         bottomNavigationBar: AppBottomNavBar(
           activeTab: AppBottomTab.wishlist,
-          onTabSelected: (tab) {
-            switch (tab) {
-              case AppBottomTab.home:
-                context.go('/home');
-              case AppBottomTab.cart:
-                context.go('/cart');
-              case AppBottomTab.wishlist:
-                context.go('/wishlist');
-            }
-          },
+          onTabSelected: context.goByBottomTab,
         ),
       ),
     );

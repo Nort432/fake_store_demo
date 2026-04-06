@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_palette.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/app_bottom_nav_bar.dart';
+import '../../../../core/widgets/app_bottom_nav_router.dart';
 import '../../../../core/widgets/app_button.dart';
 import '../cubit/cart_cubit.dart';
 import '../widgets/cart_page/cart_empty_section.dart';
@@ -86,16 +87,7 @@ class CartPage extends StatelessWidget {
       ),
       bottomNavigationBar: AppBottomNavBar(
         activeTab: AppBottomTab.cart,
-        onTabSelected: (tab) {
-          switch (tab) {
-            case AppBottomTab.home:
-              context.go('/home');
-            case AppBottomTab.cart:
-              context.go('/cart');
-            case AppBottomTab.wishlist:
-              context.go('/wishlist');
-          }
-        },
+        onTabSelected: context.goByBottomTab,
       ),
     );
   }
