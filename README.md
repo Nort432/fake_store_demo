@@ -1,17 +1,49 @@
-# fake_store_demo
+# Fake Store Demo (LYQX Test Task)
 
-A new Flutter project.
+Compact Flutter app built as a test task for **LYQX**.
 
-## Getting Started
+## Stack
+- Flutter
+- Dio
+- flutter_bloc
+- get_it + injectable
+- shared_preferences
+- go_router
 
-This project is a starting point for a Flutter application.
+## Implemented Features
+### Mandatory
+- Welcome screen
+- Login flow (`POST /auth/login` + profile fetch)
+- Products list from API with lazy loading (pagination)
+- Product details screen
+- Cart: add/remove items, quantity control, total price
 
-A few resources to get you started if this is your first Flutter project:
+### Optional (implemented)
+- Wishlist with local persistence (`shared_preferences`)
+- Add/remove favorite products
+- Add to cart from wishlist
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Project Structure
+Feature-first, moderate clean architecture:
+- `core/` — shared infrastructure (theme, DI, router, network, reusable widgets)
+- `features/*/data` — DTOs, data sources, repository implementations
+- `features/*/domain` — entities/repository contracts where useful
+- `features/*/presentation` — pages, widgets, bloc/cubit, state
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Key Decisions
+- Pagination step: **24 items**
+- Duplicate load-more protection in both scroll trigger and bloc state checks
+- Theme-based styling via `AppPalette` and `AppTypography`
+- Reusable UI components for consistent screens (`AppTopHeader`, `AppBottomNavBar`, cards, inputs, buttons)
+
+## Run Locally
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
+
+## API
+Base URL:
+- `https://api.escuelajs.co/api/v1`
